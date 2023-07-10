@@ -1,0 +1,95 @@
+\section{E-Voting}
+
+\subsection{Software independence}
+When using e-voting system for elections we do not state as an assumption that the software that we will use is error-free.
+The main idea behind e-voting is that has to be \textbf{software independent}, meaning that the software used for the e-voting cannot cause an undetectable change or error in an election outcome. Basically, we should always check the output of the software. 
+
+When monitoring the audition, we should check that outcome is correct. Audit the election and not the equipment used. 
+
+\subsection{Security}
+
+E-voting equipment is not connected to Internet, making it hard to be controlled remotely. 
+
+When using e-voting we have to keep it secure by: 
+
+\begin{itemize}
+    \item Anonymity of the votes: vote's choice should be confidential.
+    \item Accuracy of the votes: integrity of votes and number of votes cannot be altered. 
+    \item Eligibility: only legitimate voters should be taken into account. 
+    \item Un-reusability: each voter is allowed to vote just one single time. 
+    \item Public Verifiability: anyone should be able to check the validity of the voting process.
+    \item Fairness: no partial results can be computed before the end of the election. 
+\end{itemize}
+
+We have two more requirements regards the remote process:
+
+\begin{itemize}
+    \item Receipt-free: voter is not able to construct the contents of his vote.
+    \item Reviseability: voter is allowed to change his vote. 
+\end{itemize}
+
+\subsection{I-Voting system}
+
+\subsubsection{Description}
+
+In I-Voting system, voters are allowed to cast their ballots from any internet-connected computer anywhere in the word. In this method, we have a period of pre-voting where voters log into the system and can then cast a ballot using:
+\begin{itemize}
+    \item ID-card in a personal SmartCard Reader
+    \item Mobile-ID in a mobile app
+\end{itemize}
+
+The voter's identity is removed from the ballot before it reaches the National Electoral Commission for counting, ensuring anonymity. 
+
+\subsubsection{Process workflow}
+
+\begin{itemize}
+    \item 1. Encrypt vote with Public Key of Election Authorities
+    \item 2. Sign vote with eID Voter private key
+    \item 3. Send Vote to the Vote Forwarding Server
+    \item 4. The Vote Forwarding Server authenticate Voter using their eID public key
+    \item 5. Vote Forwarding Server sends ballots to the Vote Storage Server for cleansing
+    \item 6. Vote Storage Server stores ballots on a DVD
+    \item 7. Delivery DVD to server with Vote Counting App (VCA)
+    \item 8. Publish results and then audit data and process
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.5]{img/estonian_ivoting.png}
+    \caption{Estonian E-Voting process}
+    \label{fig:estonian_e-voting}
+\end{figure}
+
+\subsection{Analysis on Estonian I-Voting system}
+
+Audit process must support verifiability and user trust in the system. \newline
+In I-Voting, it is possible to overwrite the previous votes. However, physical vote always overrules any electronic vote. \newline
+It is important to always verify the integrity of the devices that sends the votes. Also, physical security requirements for election facilities are required. This means server rooms with security seals and tamper-checks.\newline
+
+It is important to be resistant to highly sophisticated attacks: large-scale on voter machines or attacks on hardware before reaching the system. 
+
+\subsection{I-Voting problem}
+
+\begin{itemize}
+    \item Malware and hacks
+    \item Lack of physical security
+    \item Side channels attacks to air-gapped server 
+    \item Human errors
+\end{itemize}
+
+Human errors can involve social engineering, weak passwords, poor physical security at the voting location, or coercion. \newline
+Vote Hijacking (Malware) consist in simply compromise the elector's vote and give the vote to a certain candidate chosen from the attacker. \newline
+
+\subsection{Air-Gapped computer}
+Air-gapped computer are security measure to ensure that a computer network is physically isolated from unsecured networks like the internet and LANs. 
+When performing air gapping, computer should be also physically secured, and data should be transfered just by using media devices. \newline
+
+Air-gapped computer can be breached by social-engineering, electromagnetic, acoustic channels.
+For instance, it is possible to perform a RSA Key extraction via Low-Bandwidth Acoutstic Cryptoanalysis. Ultrasonic sound waves with higher frequencies are both inaudible and provide greater bandwidth. 
+
+\subsection{Air-Gapped computer security}
+All air-gapped computer should be secured in a off-site or fully secured room. We should make sure that all the cables are properly shielded to avoid electromagnetic attacks. Also, unauthorized USB devices should be blocked. Disconnect all cables when machine is not in use and replace standard drives with SSD, to avoid electromagnetic attacks and acoustic leaks. Last but not least, always remember to encrypt all your data. 
+
+
+
+

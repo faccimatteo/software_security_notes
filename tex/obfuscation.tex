@@ -1,0 +1,314 @@
+\section{Obfuscation}
+
+\subsection{Main goals}
+Obfuscation in programs has two main goals: 
+\begin{itemize}
+    \item make more difficult to understand obfuscated code for a human respect the original  code.
+    \item make it difficult to analyse automatically for a reverse engineering tool in order to hide some asset in the program. 
+\end{itemize}
+
+Offuscated program requires more human time or computing power to be understood, as a consequence, we have more costs than understand the original program. 
+
+\textbf{Obfuscation tools} turn the original code into obfuscated code.
+The goal of \textbf{obfuscating transformations} is to make the program as hard to understand as possible. 
+
+Code obfuscation adopt some techniques to modify the code. Some of them are: lexical transformations, control-flow transformations, data transformations, anti-disassembly, anti-debugging, and code/data encoding or decryption.
+
+\subsection{Identifier renaming}
+
+The most simple kind of obfuscation is based on lexical transformations of all the names of the entities that a program is build on (like classes, methods, variables, ecc.), turning them into random strings with no semantics.  
+
+\subsection{Lexical Transformations}
+
+When an obfuscation tool use lexical transformation technique, as it parses the code it removes spaces, comments and new line feeds. 
+During this process, when user defined names are encountered, they are replaced with some random string.
+An example of replacing: 
+\begin{itemize}
+    \item print strings $\rightarrow$ hexadecimal values
+    \item integer values $\rightarrow$ complex equations 
+\end{itemize}
+
+\subsection{Abstract transformation}
+
+Abstract transformation is the process of renaming variables and changing their logic, but keeping their scope.
+
+\subsection{Data transformation}
+During data transformation process, variables values are modified with complex equations to make the program working with weird data. At the end, output values must be the same.
+
+\subsection{Control Flow Transformation}
+
+Control Flow transformation process defines alias for code parts and after that reorder them in a disordered way, making confusion on the control flow of the program. 
+
+\subsection{Obfuscation script}
+
+Obfuscation scripts indicates via a long command line options, the names of the transformations that are going to be applied to the functions of a program. 
+
+\subsection{Web Assembly}
+
+When talking about obfuscating code that needs to run in the browser we have two options:
+\begin{itemize}
+    \item writing the code in C and then transform the code with a JavaScript obfuscator;
+    \item writing the code in C and then transform it with Tigress into obfuscated code, and then use Emscripten (C-to-WASM compiler) to compile the code to WebAssembly/html/JavaScript package.   
+\end{itemize}
+
+Web assembly/html/JavaScript package can be loaded by most browsers. Plus is that code can be run at near-native speed. Tigress supports more form powerful forms of obfuscating transformations than most JavaScript obfuscators. 
+
+\subsection{Obfuscating Arithmetic}
+
+Is is possible to encode integer arithmetic with the usage of different operations. 
+
+\begin{center}\label{arithm_transf}
+\begin{align*}
+        x+y &= x - \neg (y - 1) \\
+        x+y &= (x \oplus y) + 2 \cdot (x \land y) \\
+        x+y &= (x \lor y) + (x \land y) \\
+        x+y &= 2 \cdot (x \lor y) - (x \oplus y)
+\end{align*}
+\end{center}
+\par
+Arithmetic transformer allow the code to perform certain equations using different operators, as cited in \ref{arithm_transf}.
+
+\subsection{Opaque Expressions}
+
+Opaque expressions are expressions whose value is known to us as the defender (at obfuscation time) but which is difficult for an attacker to figure out.
+
+\subsubsection{Opaque predicates}
+
+Predicate can be true, false, or true or false (opaquely indeterminate predicate). 
+
+During opaque predicates strategies, we do some transformations base on two state, A and B. 
+We can define a determined control flow based on the particular situation in states. 
+Check out figure \ref{fig:opaque_transformations}.
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.65]{img/opaque_transformations.jpg}
+    \caption{Opaque transformation types}
+    \label{fig:opaque_transformations}
+\end{figure}
+
+We say a predicate is opaque if its outcome is known at obfuscation time, but difficult to deduce later. 
+Using pointer-based structures, opaque predicates make static code analysis even harder. On the other hand, with Dynamic Analysis (debugging) we can do a more in depth analysis and actual identify which path are running paths and the ones that are never executed. 
+
+\subsection{Control Flow Flattering}
+
+Flattening is a technique that re-arrange initial control flow graph of the program in a switch similar construct.
+\par 
+After constructed the CFG, we add a new variable \textbf{int next = 0}
+every instruction is placed at the same level and converge in a single point. Every instruction reference other instructions in the same level, except that one that exit from the switch. Theoretically, what we do is create a switch inside an infinite loop, where every basic block is a case. Then the last part after the instruction execution is the adding of an instruction to update the next variable. 
+
+\subsection{Virtualization Obfuscation}
+
+Virtualize performs the conversion from code into data. 
+It is the opposite process to reverse engineering. For instance, code is transalted into high-level bytecode. Remember, bytecode has no registries, it only works with stack-based operations. 
+\par
+It creates a virtual machine that implements such bytecode into platform-specific assembly. 
+Virual program counter (VPC) iterates over the bytecode and execute it while stack pointer (SP) points to the top of the Stack. 
+
+\subsection{Data Obfuscation}
+
+Data splitting is the process of distributing the information of one variable into several new variables. An example could be performing a division of a boolean variable and performing some complex logical operations that returns the value of the original boolean variable. 
+\par
+Data merging, on the other hand, is the process of aggregating several variables into one single variable. For instance, merge two 32-bit integer into one single 64-bit integer. 
+
+\subsection{Data procedurization}
+
+Data procedurization is the process of substituting static data with procedure calls. We could substituite a single string with a function that allow us to represent all possible strings, based on certain parameters. With that, we can output our previous static string. 
+Again, we could encode numerical data with two inverse function f and g, so that when we want to assign the variable of the function we use function f, when we want to use that variable, we can invoke the function g.
+
+\begin{lstlisting}
+    j = f(v);
+    printf("%d", g(j));
+\end{lstlisting}
+
+\subsection{Data encoding}
+
+In data encoding, we encode data with mathematical functions or chipers. 
+To obfuscate arrays, several transformation can be applied: 
+\begin{itemize}
+    \item splitting one array into several arrays; 
+    \item merging several arrays into one array
+    \item folding an array to increase its dimension
+    \item flattening an array to reduce the dimension
+\end{itemize}
+
+\subsection{Method Obfuscation}
+
+Method inline process involves replacing the original procedure call with the function body instead. Practically, we are removing every reference of the function. 
+\par
+Merging multiple functions into one is another useful obfuscation technique: an extra formal argument is added to allow call sites to call any of the functions. This technique is often used with the support of virtualization, and it is used before that process. 
+\par 
+Method split outline pieces of a function into a single function. This transformation can be used to break a large, virtualized, function into a smaller, less noticeable, pieces. 
+There exist different split methods. The order in which they are applied is determinant to code transformation. 
+\par 
+Method clone is applied if a method in code is heavily invoked. We can create replications of the method and randomly call one of them. The advantage of this process is that we can obfuscate the replicated methods in a different way, making them appear as whole different process. 
+\par
+Method proxy creates a proxy with the scope of confusing reverse engineering process. 
+An example can be creating a public static method with random identifiers. 
+This approach can be taken into consideration when method signature cannot be changed. 
+
+\subsection{Encode External}
+We want to hide calls to external functions, such as system calls or calls to standard library functions. 
+
+\subsection{Encode External (Tigress script)}
+Using the obfuscation tool tigress, we have available the following scripts. 
+\begin{itemize}
+    \item \textbf{InitEncodeExternal}: this transformation uses dlsym() to load the system calls we want to hide by name;
+    \item \textbf{EncodeLiterals}: this transformation hides these names in a function with a name we can assign (i.e. STRINGENCODER);
+    \item \textbf{Virtualize} transformation hides what's going on in the STRINGENCODER function;
+    \item \textbf{EncodeExternal} transformation replaces the direct calls to the system calls in main() with indirect ones. 
+    
+\end{itemize}
+
+\section{Anti-Disassembly Obfuscations}
+
+These techniques are introduced to hide malicious code snippet inside a code that cannot be disassembled.
+
+\subsection{Insert Bogus Dead Code}
+
+One example is bogus dead code, where we insert an unreachable bogus instructions like this one: 
+
+\subsection{Insert Bogus Dead Code}
+\begin{lstlisting}
+    if (Pf)
+        asm(".byte 0x55 0x23 0xff...");
+\end{lstlisting}
+
+They are used unconditional jumps (goto) that make the actual Control Flow. 
+\par 
+Code defined immediately after an unconditional jump is always unreachable.
+
+\subsection{Insert Irregular Code}
+Inserting uncompleted instructions after unconditional jumps, make the uncompleted instructions unreachable as junk codes. If a disassembler cannot handle such uncompoleted instructions, they will have troubles when separating instructions. 
+
+\subsection{Branch Functions}
+The goal of these transformations is to make it harder for automatic analysis tools to determine the target of branches. 
+A branch can be created with conditional jumps, unconditional jumps, and function calls. 
+Unconditional jump to a target address can be transformed to a function call returning to an address plus an offset. 
+
+\section{Self-Modifying Code}
+
+\subsection{Abnormal Programs}
+
+In a "normal" program, the code segment should not change.
+Abnormal programs are programs that change their code segment. 
+For instance, we can override values of instructions and make them execute a different instruction from the original program (suppose a case where an instruction is mapped by a opcode, we can just write a different opcode for the instruction). 
+\par
+During abnormal programs new CFG models can be build, showing all the different states each instruction can be in.  
+
+\subsection{JIT Dynamic Obfuscation}
+
+\subsubsection{Definition}
+
+This transformation translate a function F into a new function F'. When F' is executed, F will be dynamically compiled to machine code. It is used by downloaders to install software, but also from packers in malware.
+
+\subsubsection{JIT Dynamic Obfuscation}
+
+This transformation is similar to JIT transformation, but this time the jitted code is continuously modifier and updated at runtime. It uses self-modiyfying code technique. It keeps code in constant move, and code should never exists in clear-text. 
+
+\subsubsection{JIT Dynamic Schemes in Tigress}
+
+There are a lot of published schemes in Tigress. Each scheme is the combination of two properties. The first one is the level of granularity at which the program is encoded and decoded (function-level, basic block-level, instruction-level, or byte-level). 
+\par 
+The other property is the codec. It determines how a function/block should be encoded and decoded.
+
+A problem we can encounter is while performing dynamic obfuscation of recursive functions. 
+Whenever a function is called, it needs to be fully encoded. If the function calls itself we have a problem, since some blocks are encoded and others are in clear-text. When performing obfuscation of recursive calls, blocks of recursive calls are not encoded. 
+Encoders/decoders are placed such that recursive calls won't leave any blocks in clear-text. 
+
+\subsection{Implicit Flow}
+
+This strategy converts explicit control flow instructions to implicit ones.
+It can helps engineers from addressing the correct control flows. 
+A practical example can be replacing control instructions of assembly codes (i.e. jmp and jne) with a combination of mov and other instructions which implements the same control semantics. At the end we will have converted explicit control flow to implicit control flow, keeping the same semantics. 
+\par 
+In anti-alias analysis, we disrupt static analysis tools that make use of inter-procedural alias analysis. In Tigress, we replace all direct function calls with indirect ones. 
+For instance, a simple call to x = foo(n) is traduced to:
+
+ \begin{lstlisting}
+ void *arr[] = {..., & foo, ... };
+int main () {
+    int x = ((int (*)(int n )) arr[expr=42 ])(n);
+}
+ \end{lstlisting}
+where: 
+\begin{conditions}
+ arr        &  Global array containing function address \%rax \\
+ expr^{=42} &  Opaque expression computing the index of foo's address in arr \%rbx 
+\end{conditions}
+
+Taints analysis measure the level of influence external data have on the application. 
+When debugging a program, one can see data moved and copied around all the time. 
+This can be seen as Information Flow Analysis. 
+Flow x $\rightarrow$ y is a series of operations that use the value of an object X to derive the value of an object Y. If source of the value of object X is not trustworthy, then X is tainted. 
+Taint is propagated to other objects using the data from X. 
+Dynamic Taint analysis can be used to infer code reachability. 
+The goal of the transformation is to disrupt analysis tools that make use of dynamic taint analysis. 
+Anti Taint Analysis use implicit flow as a basic building block. Before you can use these you need to call the \textit{--Transform=InitImplicitFlow} and list which of the implicit flow variants you are going to use later.
+
+\subsubsection{Parallelized (Multi-Threaded Code)}
+
+When performing analysis, code in threads is more difficult to reverse engineer, as it hides the actual flow of control. We can then use some technique to make the reverse engineering process harder.\newline
+\par 
+We can, for example, create a dummy process that perform no useful task and run them in  parallel with the actual instructions. 
+We can split a sequential section of the application into multiple sections executing in parallel. 
+A code block that does not have any data dependencies can easily be parallelized. 
+A code block that has data dependencies can be parallelized by using synchronization functions. 
+
+\subsection{Obfuscating different scenarios}
+
+When trying to obfuscate mobile apps, we need to understand how android apps are buildt. They are build by different components: java codes, native codes, third-part libraries, and other resources. 
+When applying some obfuscations in an ad-hoc way we can achieve limited obscurity.
+It is important to note that un-obfuscated information could lead to make meaningless the previously obfuscated code. 
+
+We can use obfuscators like ProGuard, DexGuard, and DexProtector to obfuscate Android apps. It is extremely important to hide the code part that is responsible for password generation. 
+\par 
+When obfuscating compiled JavaScript, we should focus on binary files and bundle.js. We could also further randomize the names of the mp3 files to confuse reverse engineers. 
+When obfuscating a neural network, we should aim to obfuscate the structural information of a machine learning model. The obfuscation technique offered by Xu et al. consist in take deep learning models and reload such knowledge into less deep, shallow networks.
+The new network will have same accuracy of the original model, but will have poor learning abilites. 
+\par 
+DRM system have control on user access to multimedia files. 
+The most common solution for secure DRM system is based on content encryption. In this, the hard part is to hide decryption keys, especially when attackers can have full access to the decryption software and the computing environment. 
+However, \textbf{White-box encryption} is an obfuscation approach which can resist to key extraction attacks. 
+
+\subsection{Dynamic Security}
+
+\subsubsection{Static Security, a wrong assumption}
+
+Static security is the assumption that everything will be secure no matter when. Reality does not confirm this, as anything can be hacked given enough time and effort. 
+How can we limit potential damages if there's a breach?
+What is your renewability strategy? 
+
+\subsubsection{Dynamic Security, definition}
+
+Dynamic security is a security model that enables the protection of digital assets against unauthorized use through the upgrade and renewal of the underlying security in the field. 
+\par
+Proactive prevention monitor hacker channels to understand attack techniques and apply security updates to reset hacker's clock. 
+\par 
+Reactive reduction, instead, limits the impact of a breach before it has a big impact. 
+
+Dynamic security benefits are then possible mitigation of the breach impact and business disruption. In static security, once security is broken, the entire security is broken and it is hard to be restored. 
+In a dynamic security context, once security has been broken, the security can be renewed and restored immediately in a planned way. 
+
+\subsection{Deploying Obfuscation}
+When deploying obfuscation, we can pay attention to multiple aspects, like:
+\begin{itemize}
+    \item monitor adversarial communities 
+    \item be prepared with new technologies
+    \item give adversaries a diversity of targets 
+    \item remote attestation 
+\end{itemize}
+
+Software diversity, instead, is important for: 
+\begin{itemize}
+    \item minimizing scope of attacks 
+    \item preventing automated attacks
+    \item provide rapid recovery in the event of an attack
+    \item make the business unattractive to the hacker
+\end{itemize}
+
+Spatial diversity means that we can prevent collision by giving each adversary a different obfuscated program.
+\par
+Temporal diversity, on the other hand, means that adversary sees a sequence of code variants over time. It aims to overwhelm his analytical abilities, and it has small time window to execute an attack. 
+\par 
+To conclude with, we can use semantic diversity to make code variants semantically incompatible. With this, previously cracked code variants have no value. This is known as "software aging". 

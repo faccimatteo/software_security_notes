@@ -1,0 +1,140 @@
+\section{MATE}
+
+\subsection{Definition}
+
+MATE (Man-At-The-End) is an attack that occurs when an adversary has  access to a certain device and compromises it by using some techniques, such as reverse engineering or tampering, with its hardware or software. 
+
+\subsection{Examples}
+
+Examples of tampering could be:
+
+\begin{itemize}
+    \item Reverse engineering in a physical device such as a IoT component, to check its behavior and how source code is made
+    \item Cracking a software by generating keys based on a condition that software verifies disrupting its license system
+    \item In ARP poisoning attack, for instance, we trick a host by build an incorrect ARP tables and redirecting all the messages that should be sent to are another person to us. This attack is an impersonation attack, but can it is as definition a MATE attack
+\end{itemize}
+
+\subsection{Software Protection}
+
+Software protection is the art of protecting programs from malicious users on untrusted hosts.\newline
+Imagine that Alice is a user that works online.
+She can be protected using the combination of different techniques: 
+\begin{itemize}
+    \item Network Firewalls
+    \item Virus-scanner that protects from viruses, worms and trojan horses
+    \item IDS (Intrusion Detection System), that analises network to detect if "Bob the hacker" is doing something suspicious in the network
+\end{itemize}
+
+\subsection{MATE attacks}
+
+Imagine now that Alice sells to Bob a program containing a secret S.
+Bob can gain some economic advantage over Alice by extracting or altering S. 
+Encryption is not the key in this case. Even though, software can be protected in other ways. 
+\newline
+\textit{From what we need to protect a software, or in other ways, how can be a software attacked?}
+\newline
+\begin{itemize}
+    \item Software can be cracked, and unlicensed copies can be sold after that.
+    \item Piracy of data viewed during software utilization
+    \item Theft of secrets contained in the software, like crypto keys
+    \item Theft of intellectual Property. In this way applying reverse engineering, we can reuse it "as is". This practice is called \textbf{\textit{Code-lifting}}
+    \item Unauthorized modifications, meaning we can remove protection in the software or add (malicious) functionalities
+\end{itemize}
+
+A MATE attacker can have physical access to a device, can inspect and reverse engineer software, and can tamper with its hardware or software. 
+
+\subsection{What is MATE applied for?}
+
+MATE can be applied to \textbf{software licensing}. In software licensing, the security of the license on each client user is controlled by a license server. Another two fields are \textbf{multimedia content consumption} where DRM (Digital Rights Managements) are encrypted licenses that acts as rights for the multimedia content. Last but not least, mobile apps on smartphones. These last one have no hardware security, but they just have software protections. 
+\par
+In the snippet below, we have a high level look on how could be handled a malicious MATE user.
+\begin{lstlisting}
+    set_top_box() {
+        if (bob_paid(“SkyTV”))
+            allow_access();
+        if (hardware_is_tampered()
+        ||
+        software_is_tampered()
+        ||
+        bob_is_curious()
+        ||...)
+        punish_Bob();
+    }
+\end{lstlisting}
+This time, instead, how could we handle DRM on a software.
+\begin{lstlisting}
+    int DigitalRightsMgmt () {
+        movie_data=download();
+        key=0x38...;
+        movie =decrypt(key, movie_data);
+        play(movie);
+    }
+\end{lstlisting}
+
+To conclude with, license is something like this.
+
+\begin{lstlisting}
+    int main () {
+        if (today > “Jul 27,2017”){
+            printf(“License expired!”);
+            exit;
+        }
+    }
+\end{lstlisting}
+
+\subsection{Possible Hacks and Tools}
+
+The hacks to perform a MIME attack are include: code extraction, algorithms discovering, understanding design, finding keys, and modify code. 
+\par 
+Tools that can be used are static analysis, dynamic analysis, disassembly, decompilation, slicing, debugging, and emulation. 
+\par \textbf{Watermarks} and \textbf{fingerprints} are techniques used to secure a software program. 
+Talking about the economical side of MATE attacks, the attacker has a initial phase of engineering (identification) where he has to identify the possible exploit in the software. This has a huge cost in the first period. After (if) the attacker can identify the vulnerability and can crack the program, he can have a revenue back, selling its copies. 
+Obviously, the more secure is the software, the more will be the time used from the attacker to reverse. Furthermore, if the software is kept secured, the attacker will always have to adapt to the changes, reducing its gaining significantly. Actions that software developer can apply to secure a software are then \textbf{protection}, revenue, and \textbf{renewability}. 
+
+\subsection{Possible solutions to MATE attacks}
+
+Listed below we have possible approaches we can adopt when encountering MATE attacks: 
+
+\begin{itemize}
+    \item Reverse Engineering $\longrightarrow$ Obfuscation
+    \item Software Tampering $\longrightarrow$ Tamper Proofing
+    \item Software Piracy $\longrightarrow$ Watermarking 
+\end{itemize}
+
+\subsection{Obfuscation}
+Obfuscation creates another program from the original program, but with more complex verification logics, hiding the secrets of the code (like actual passwords), so that attacker cannot reverse and understand what is going on under the hood. When making obfuscation is important to have a minimum overhead introduced. \newline
+Code obfuscation can be done applying these rules: lexical transformations, control-flow transformations, data transformations, anti-disassembly, anti-debugging (making a mess with  binary code and making even harder to analyze), and code/data encryption. 
+
+\subsubsection{Steganography}
+
+\textbf{Steganography} is a technique used to hide a particular secret message in a apparently common message. Can be applied in many differents ways, from taking all capital letters in a message, to hide a message inside an image file by taking the least significative bit of an image and group them together 1 Byte at a time to form word/s. \newline  
+The first technique is used in a problem defined as follows: imagine two prisoners have to communicate each other using just a message that passes from a warden. If the warden discover them, the escape fails. Cryptography cannot be used.\newline 
+The second technique is called LSB (\textbf{Least Significant Bit}).
+
+\subsection{Watermarking}
+
+Watermarking has been introduced to contrast software piracy by claiming the developers' work. Watermarking embeds a secret message into a cover message, allowing us to prove ownership. \newline
+One thing to mention is that watermarking is useful only if software can be inspected. 
+
+\subsubsection{Fingerprinting}
+Fingerprinting embeds custom secret messages into cover messages, allowing us to trace a copyright violator. 
+
+\subsection{Tamper-Proofing}
+
+Tamper Proofing tries to define rules for which the program has been tampered, making software unusable after discover the tampering.\newline 
+Tamper Proofing transforms code into a new code which has the same semantics, perform hash checking and stop when binary is slightly modified. 
+Tamper proofing is made by two parts: 
+\begin{itemize}
+    \item detecting that an attack has occurred
+    \item reacting to this attack
+\end{itemize}
+\par
+The reaction can be a combination of self-destructing or stop service. 
+
+\begin{lstlisting}
+    if ( CRACKED ) {
+        // Kill program and warn user
+    }
+\end{lstlisting}
+\par 
+Tamper proofing can be used in combination with obfuscate to guarantee a more secure protection. With these technique, we can make the tamper proofing harder to detect from an attacker. 

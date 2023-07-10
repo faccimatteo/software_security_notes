@@ -1,0 +1,333 @@
+\section{Assembly Recap}
+
+\subsection{Values representation}
+
+\textbf{How many value can we represents with n bits?}
+
+In general, we can represents \textbf{$2^n$}.
+
+\subsubsection{Character representation}
+
+Number of characters to represent is finite, we can list all of them by assigning a binary string. 
+When we want to represent something we need to agree on a standard for representing character set.
+\par 
+One of the most used character set is ASCII, 7 bits version allows 128 unique characters. 
+Another modern example is UTF-8. 
+
+\subsection{Unicode Character Set}
+
+Unicode Standard is an information technology standard for the consistent encoding, representation, and handling of text expressed in most of the
+world's writing systems. It defines 144,697 characters covering 159 modern and historic scripts, as well as symbols, emoji, and non visual control and formatting codes.
+
+\subsection{Positional notation with a generic base B}
+
+Value of a number represented in a generic base B with symbols used for digit representing quantities is expressed as follows: 
+
+\begin{equation}
+\label{conversion_formula}
+    d_{n-1} * B^{n-1} + d_{n-2} * B^{n-2} + ... + d_{1} * B^{1} + d_{0} * B^{0}
+\end{equation}
+where: 
+\begin{conditions}
+ n     &  number of the digits in the number \\
+ B     &  base of the representation
+\end{conditions}
+
+An example can be number 642, expressed in base 10, which is equal to: 
+\begin{equation}
+    6 * 10^{2} + 4 * 10^{1} + 2 * 10^{0} = 642
+\end{equation}
+
+Just to cite most famous bases: 
+\begin{itemize}
+    \item Decimal numbers have base 10 and need 10 digit symbols:
+    \begin{equation}
+        0,1,2,3,4,5,6,7,8,9
+    \end{equation}
+    \item Exadecimal numbers have base 16 and need 16 digit symbols:
+    \begin{equation}
+        0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F
+    \end{equation}
+    \item Binary numbers have base 2 and only need 2 digit symbols:
+    \begin{equation}
+        0,1
+    \end{equation}
+\end{itemize}
+
+\subsection{Converting from binary to decimal}
+
+To convert a number from binary to decimal we can use the formula from \ref{conversion_formula}
+
+\subsection{Converting from binary to hex}
+
+Split binary in groups of 4 digits and convert them in the relative base-16 number. 
+
+\subsection{Real numbers to binary}
+
+As in decimal base, any number can be written in binary, even floatin points number. 
+\par 
+We can divide them in two section: 
+
+\begin{itemize}
+    \item Single precision, using 4 bytes
+    \begin{itemize}
+        \item 1 bit for the sign, negative or positive
+        \item 8 bits for the exponent N of $2^N$
+        \item 23 bits for the mantissa 
+    \end{itemize}
+    \item Double precision, using 8 bytes
+\end{itemize}
+\par 
+Using this technique, we can increase the number of real numbers we can represent by using a finite number of bits. 
+
+\subsection{Memory organization}
+
+Conceptually, memory is a single, large vector of bytes, each block with a unique address.
+The value of each byte can be both read and written. Whenever a program is running, data is referred by using the address of bytes in memory. Depending from the size of a value represented (int, double, string, char, ecc.) we assing a dedicated range of bytes in memory. For example, an the maximum value of an unsigned integer we can store in a byte is $255_10, (11111111_2)$ 
+
+\subsection{Machine languages, between HW and SW layers}
+
+CPU are designed to recognize machine instructions, whose are stored in memory as sequences of bits. \newline
+The list of instructions with their binary encoding is called machine languages. \newline 
+An example of an instruction of machine language is \textbf{ADD A,B,C}, that takes the two values stored in registries B and C (the operands) and sum them in a value and store it into the registry A. 
+
+\subsection{Program execution}
+
+The control flow is the order in which instructions are fetched/executed and it corresponds to the sequential order in which instruction are stored in memory. 
+\par
+The control flow of the CPU is guided by an address in memory.\newline
+The Program Counter PC maintains for a running program the address of the next machine instruction to execute.The program counter is also called Registry Instruction Pointer (RIP).
+\par 
+The CPU continuously \textbf{repeats} the following 3 steps:
+\begin{itemize}
+    \item \textbf{Fetch} from memory the next instructions pointed by the PC
+    \item \textbf{Decode} the instruction
+    \item \textbf{Execute} the instruction, and update the PC to the next instruction to fetch
+\end{itemize}
+\par 
+However, the sequential control flow can be modified by the program,
+executing special instruction of JUMP/BRANCH.
+
+\subsection{Some definitions}
+Instruction Set Architecture (ISA): the parts of a processor design that one
+needs to understand or write assembly code (instruction set specs, registers)
+\begin{itemize}
+    \item CISC (complex instruction set computer): architecture has many specialized instructions some rarely used in programs
+    \item RISC (Reduced Instruction Set Computer): simplifies the processor by efficiently
+implementing only the instructions frequently used
+\end{itemize}
+Microarchitecture: implementation of the architecture 
+Code Forms:
+\begin{itemize}
+    \item Machine Code: The byte level programs that a processor executes
+    \item Assembly Code: A text representation of machine code
+\end{itemize}
+
+\subsection{Assembly concepts}
+
+\subsubsection{Programmer-Visible State, or what can be seen/used by the programmer when programming}
+
+\textbf{RIP}, contains the address of the next instruction. 
+\textbf{Register File}, contains program data.
+\textbf{Condition Codes}, store status information about the most recent arithmetic operation. They are used for conditional branching. 
+
+\subsubsection{Memory}
+As mentioned previously, memory is just a pre-allocated size for a program in the form of Byte-addressable array. It does contain code, user data, and OS data. It also includes stack used to support procedures calls.
+
+\subsection{Turning C into Object Code}
+
+When compiling C code, we step into these phases:\newline
+C program, Asm program, Object program, and Executable program. 
+Even compiling the same code, the result can differ a lot based on the gcc version and the machine we are compiling it. 
+
+\subsection{Assembly characteristics}
+
+\begin{itemize}
+    \item \textbf{Integer}: 1, 2, 4, or 8 bytes. Used for data values or addresses.
+    \item \textbf{Floating-point}: 4, 8 or 10 bytes. 
+    \item No aggregate types such as arrays or structures. We just have contiguously allocated bytes in memory. 
+    \item Primitive operations: perform arithmetic function on register or memory data, transfering data from memory to registers. Two of the operations we frequently do are
+    \begin{itemize}
+        \item Load data from memory into register
+        \item Store register data into memory
+    \end{itemize}
+    \item Transfer control instructions allow to perform unconditional or conditional jump in control flow.
+\end{itemize}
+
+When writing code, we are just having sequences encoding instructions written traduced by the assembler. The assembler allow us to translate .s into .o. Each instruction is binary encoded. Assembler can just 'translate' code, but what if code is written in multiple files? \newline
+Linker is responsible to resolve references between files. In fact, it allows the usage of static run-time libraries. Some libraries are dynamically linked. The linking phase begin when program begins the execution. 
+
+\subsection{Machine Instruction comparison}
+
+In C code, when we want to store a value t at a given address in memory we do the following: 
+\begin{lstlisting}
+    *dest = t;
+\end{lstlisting}
+
+In Assembly, instead, we do the same thing by using the \textbf{\textit{movq}} instruction. The movq instruction move 8-byte value to memory. 
+\begin{lstlisting}
+    movq %rax, (%rbx)
+\end{lstlisting}
+where: 
+\begin{conditions}
+ t        &  Register \%rax \\
+ dest     &  Register \%rbx \\
+ *dest    &  memory  M[\%rbx]
+ 
+\end{conditions}
+
+Lastly, in Object Code, we have 3-byte instruction, stored at address 0x40059e
+\begin{equation}
+    0x40059e:   48 89 03
+\end{equation}
+
+\subsection{Disassembling Object Code}
+
+We can disassembly object code using the following command\newline
+\begin{equation}
+    objdump -d sum
+\end{equation}
+
+It is a useful tool for examining object code. It allows us to analyzes bit pattern of series of instructions. 
+What we do obtain after the command is the assembly code contained into 3-bytes in memory, showing the address in memory at which the instruction is inserted and the syntax of the instruction. Explained disassembling process, a question come up to our mind, \textbf{what can be disassembled?}
+\par 
+We can disassembly everything that can be interpreted as executable code. 
+Disassembler examines bytes and reconstructs assembly source 
+
+\subsection{The 8 General-Purpose Registers (GPR)}
+
+We have special registers which are reserved, and each one of them has a certain purpose. 
+
+\begin{itemize}
+    \item Accumulator register (AX): Used in arithmetic operations
+    \item Counter register (CX): Used in shift/rotate instructions and loops
+    \item Data register (DX): Used in arithmetic operations and I/O operations
+    \item Base register (BX): Used as a pointer to data (located in segment register DS, when in segmented mode)
+    \item Stack Pointer register (SP): Pointer to the top of the stack
+    \item Stack Base Pointer register (BP): Used to point to the base of the stack
+    \item Source Index register (SI): Used as a pointer to a source in stream operations
+    \item Destination Index register (DI): Used as a pointer to a destination in stream ops
+\end{itemize}
+
+All registers can be accessed in 16-bit and 32-bit modes. 
+Using the 16-bit mode, the register is identified by its two-letter abbreviation from the list below. In 32-bit mode, the register is prefixed with an 'E', which stands for extended. 'EAX' is the accumulator register as a 32-bit value. 
+Similarly, in the 64-bit version, the 'E' is replaced with an 'R', so the 64-bit version of 'EAX' is called 'RAX'. Furthermore, it is also possible to address the first four registers (AX, CX, DX and BX) in their size of 16-bit as two 8-bit halves. 
+\begin{itemize}
+    \item LSB, or low half, is identified by replacing the 'X' with an 'L'. 
+    \item MSB, or high half, uses an 'H' istead. 
+    \item For example, CL is the LSB of the counter register, whereas CH is its MSB.
+\end{itemize}
+
+Total five ways to access the accumulator, counter, data, and base registers: 64
+bit, 32 bit, 16 bit, 8 bit LSB, and 8 bit MSB.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.2]{img/8_GPR.png}\caption{GPR registers in different bit sizes.}
+\label{fig:GPR}
+\end{figure}
+
+\subsection{The 6 segment registers}
+
+We have 6 more registers called segment registers, pointing to different memory area. 
+\par 
+\begin{itemize}
+    \item Stack Segment (SS): Pointer to the
+stack
+    \item Code Segment (CS): Pointer to the
+code
+    \item Data Segment (DS): Pointer to the
+data
+    \item Extra Segment (ES): Pointer to extra data ('E' stands for 'Extra').
+    \item F Segment (FS): Pointer to more extra data ('F' comes after 'E')
+    \item G Segment (GS): Pointer to still more extra data ('G' comes after 'F')
+\end{itemize}
+
+Nowadays, most applications on most modern operating systems use a memory model that points nearly all segment registers to the same place. 
+They use an alternative mechanism, called paging. FS or GS is an exception to this rule, being used to point at thread
+specific data.
+
+\subsection{X86 is Little-Endian}
+The X86 is a little-endian architecture, meaning that the last significant byte of a multibyte data value is stored first, at a lower memory address than each subsequent byte of that data item. 
+\par
+Big-endian data is stored in reverse order, with the most significant byte
+of a data value being stored at a lower memory address than each
+subsequent byte.
+\par 
+Processors may be classified as big
+endian or little endian, or in some
+cases, both.
+
+\subsection{EFLAGS Register}
+We have 16-bit responsible to take some values in certain situations. The different usage of these registers can be sum up as follows: 
+
+\begin{itemize}
+    \item CF: Carry Flag. Set if the last arithmetic operation carried (addition) or borrowed (subtraction) a bit beyond
+the size of the register. This is then checked when the operation is followed with an add with carry or subtract
+with borrow to deal with values too large for just one register to contain.
+    \item PF: Parity Flag. Set if the number of set bits in the least significant byte is a multiple of 2
+    \item AF: Adjust Flag. Carry of Binary Code Decimal (BCD) numbers arithmetic operations
+    \item ZF: Zero Flag. Set if the result of an operation is Zero (0)
+    \item SF: Sign Flag. Set if the result of an operation is negative
+    \item TF: Trap Flag. Set if step by step debugging
+    \item IF: Interruption Flag. Set if interrupts are enabled
+    \item DF: Direction Flag. Stream direction. If set, string operations will decrement their pointer rather than
+incrementing it, reading memory backwards
+\end{itemize}
+
+\subsection{Jumps and Loops}
+
+Jumps and loops are the basic instructions for branching. 
+Loops are instructions to repeat a block of code.
+Jumps are instructions that branch to a distant labeled instruction when a flag condition is met.
+
+\subsection{Jcond instruction}
+
+Jcond instructions are instruction branches to a label when specific register or flag conditions are met. 
+Most common Jcond are those that follow:
+\begin{itemize}
+    \item JB, JC: jump to a label if the Carry flag is set
+    \item JE, JZ: jump to a label if the Zero flag is set
+    \item JS: jump to a label if the Sign flag is set
+    \item JNE, JNZ: jump to a label if the Zero flag is clear
+    \item JECXZ: jump to a label if ECX = 0
+\end{itemize}
+
+We have two categories of jumps: 
+\begin{itemize}
+    \item Unsigned comparison jumps.
+\par    
+We normally use them after a CMP op1, op2 instruction and the jumping condition is given by an unsigned interpretation of the comparison. 
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{img/unsigned_comparison_jumps.png}\caption{Jump based on unsigned comparisons.}
+\label{fig:unsigned_comparision_jumps.}
+\end{figure}
+    \item Signed comparison jumps 
+    
+\par
+We normally used them just after a
+CMP op1,op2 instruction and the jumping condition is given by a
+signed interpretation of the comparison
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.5]{img/signed_comparison_jumps.png}\caption{Jump based on signed comparisons.}
+\label{fig:signed_comparision_jumps.}
+\end{figure}
+\end{itemize}
+
+\subsection{Using comparison jumps}
+
+CMP is normally used before a comparison jump. 
+
+\subsection{Moving Data}
+
+To move data we use the \textit{movq source, dest} command.
+Operand types are the following: 
+\begin{itemize}
+    \item Immediate: constant integer data. An example can be \$0x400 or \$-533. They are like C constants, but prefixed with \$. They are encoded with 1,2,4, or 8 bytes.  
+    \item Register: one of 16 integer registers. An example can be \%rax, \%r13. \%rsp, on the other end is reserved for special use.  
+    \item Memory: 8 consecutive bytes of memory at address given by register. There are various "address modes". 
+\end{itemize}
+
+It is important to note that we cannot do memory-to-memory transfer with a single instruction. 

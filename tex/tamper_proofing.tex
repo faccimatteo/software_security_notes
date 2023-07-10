@@ -1,0 +1,63 @@
+\section{Tamper proofing}
+
+\subsection{Definition}
+
+Code tampering are defensive security techniques to make the code stop working if an attacker tries to change binary files.
+
+\subsection{Program Integrity Verification}
+
+Modification of code and data is a common attack. User or data could modify the application and the application cannot rely on its environment to report against code and data tampering attacks. 
+\par
+Data tampering on code can provide attacker the ability to modify the execution of the application resulting in: 
+\begin{itemize}
+    \item undesidered behavior
+    \item escalating authorized privileges
+    \item by-passing or breaking the copy protection on the application
+\end{itemize}
+
+Program integrity verification, is a process making an application tampering resistant  (code and data). 
+
+We can perform integrity verification of a program image and data files on disk. 
+We can act at different module level: executable, dynamic shared libraries, other binary/data files).
+
+Integrity verification of program's binary in memory can involves: 
+\begin{itemize}
+    \item binary code
+    \item smaller fine-grain level
+    \item global constants
+    \item export table of dynamic shared libraries
+\end{itemize}
+
+
+\subsection{More in details}
+
+Signing processes at build-time is a procedure that can improve tamper proofing. 
+"On Disk" API functions can verify the entire file integrity.
+"In memory" API function allow us to inspect memory and verify code segments inside it. 
+Also notice code segment is partitioned into regions to speed up integrity checks.
+
+Tamper proofing has two main phases: 
+\begin{itemize}
+    \item Detect tampering 
+    \item Respond to tampering
+\end{itemize}
+
+The first phase is responsible of answering the question: has the code been changed? Are variables in an OK state?
+\par 
+The second phase have to take countermeasures once detecting the code has been tampering. 
+Possible actions can be refuse to run, random crash, run slower, make wrong results, ecc..
+What we get from tamper-proofing techniques then is that they necessarily need to be unpredictable.
+
+Chang & Atallah tamper-proofing method involves try to repair the function instead of applying side effects on code. +
+\par
+Basically what we do is that inside the code we have two identical functions: one function is used and the other one is used to restore the real function if tamper-proofing is detected.  
+
+\subsection{Code Guard and Checkers}
+
+Code guards are used to calculate hashes of parts of the binary code.
+Code guards' position is hidden in application and their behavior is often obfuscated.
+We can perform dynamic self-checking using redundant code guards injected in code (that auto check other code guards). 
+Each checker can then compare hash of code portions and other subset of checkers. Note that if someone want to attack our code by tampering it, it must disable all tamper-detection. Of course, checkers are combined with obfuscation to make them not detectable by an attacker. Tigress can be the subject to have the job done for that. 
+\par 
+Checkers can be invoked just before a function execution, to make us sure that the function hasn't been tampered.
+Checkers can also cover random code regions.

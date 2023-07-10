@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{array}
+\usepackage{listings}
+\usepackage{amsmath}
+
+\newenvironment{conditions}
+  {\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
+  {\end{tabular}\par\vspace{\belowdisplayskip}}
+
+\title{Software Security Notes}
+\author{Matteo Facci}
+\date{February 2023}
+
+\begin{document}
+
+\maketitle
+\newpage
+\section{Introduction}
+This document contains notes from the Software Security course, leaded by prof Paolo Falcarin at Ca'Foscari University 2022/2023.
+
+\include{MATE.tex}
+\include{assembly_recap.tex}
+\include{program_analysis.tex}
+\include{obfuscation.tex}
+\include{tamper_proofing.tex}
+\include{evaluation_of_software_protection.tex}
+\include{attack_modelling.tex}
+\include{watermarking.tex}
+\include{evoting.tex}
+\include{physical_security.tex}
+\include{side_channel_attacks.tex}
+\include{cybercrime.tex}
+\include{malware_analysis.tex}
+\include{anonymity_and_privacy.tex}
+
+\end{document}
+
+
+
+

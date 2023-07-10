@@ -1,0 +1,211 @@
+\section{Watermarking}
+
+\subsection{Definition}
+
+Watermarking is the action of embedding an unique identifier into the executable of a program. Even if it is not a reverse engineering protection, it is done as a copyright notice. 
+If an attacker tries to claim the program ownership, the watermark will show the user that the program is actually ours. 
+
+\begin{itemize}
+    \item Software fingerprinting: every copy being sold will have a unique mark in it
+    \item Traitor Tracing: allows to trace the copy to the original owner, and take legal actions as consequences. 
+\end{itemize}
+
+In audio, for example, it was used to hide short imperceptible sound to the human ear, or place the watermark in the LSB (Least Significant Bit). \newline
+In images, it is changed a single bit of a pixel, manipulating the brightness of pixels. 
+In text, we can use synonyms, punctuation errors or either modifying the syntactic structure of an English text. 
+
+\subsection{Watermarking recognizers}
+
+Watermarking recognizers are either blind or informed. 
+To extract a blind mark, marked object and secret key have to be given. 
+To extract an informed mark you instead need extra information, such as original, unwatermarked, and object. 
+
+\section{Watermarking software}
+
+\subsection{Static watermarks}
+
+When using watermarking in software we use static watermark. What we do care about is: 
+
+\begin{itemize}
+    \item encoding bitrate: percentage of bits used by the watermark. 
+    \item stealth: strength of the cover of the watermark.
+    \item resilience to attack
+\end{itemize}
+
+To encode the watermark we could structure it into: 
+
+\begin{itemize}
+    \item permutation of language structure
+    \item embedded media object
+    \item statistical property of the program
+    \item solution to a static analysis problem
+    \item topology of a CFG
+\end{itemize}
+
+
+\subsection{Dynamic watermarks}
+
+In dynamic watermarks, we dynamically encode the watermark in the runtime state of the program. As we can imagine, dynamic watermarks are more robust, but even more complex to design.
+
+\subsection{Attacks against software watermarks}
+
+There are cases in which an attacker could attack our watermarking. These cases are when: 
+\begin{itemize}
+    \item adversary knows the algorithm
+    \item adversary has complete access to the program
+    \item adversary does not know the key
+    \item adversary does not know the embedding location
+\end{itemize}
+
+
+The main problem is the following: the owner of the program have to be aware that the attacker will try to remove the mark before the program is sold. \newline 
+
+Bob could try to modify the program and insert its own watermarks, creating confusion on which one is the original watermark. \newline
+
+A distortive attack applies semantics-preserving transformations to try to disturb Alice's watermark recognizer. Transformation that can be inserted are code optimizations, obfuscations, and many more. Using these techniques, Alice is not capable anymore of detecting its watermark in the program.
+
+Another good practice is to obfuscate program's code, since the objective is to detect as little information as we can when comparing two programs with different watermarks. 
+
+\subsection{Watermarking by permutation}
+
+Algorithm wmDM is the one that allows to reordering basic blocks in the program, maintain the semantic the same. \newline
+Complexity? If you have m items to reorder you can encode O(mlog(m)) waternarking bits.
+
+\subsection{Watermarking in CFG}
+
+The basic idea is to embed the watermark in the CFG of a function and then tie the CFG to the rest of the program. \newline 
+
+Main problems: 
+\begin{itemize}
+    \item enconding number in a CFG
+    \item finding the watermark CFG
+    \item attach the watermark CFG to the rest of the program 
+\end{itemize}
+
+\subsubsection{Algorithm wmVVS: Embedding}
+
+Algorithm wmVVS allows to generate a stealthy watermark CFG, with the following properties: 
+
+\begin{itemize}
+    \item basic blocks have out-degree of one or two
+    \item reducible 
+    \item shallow
+    \item small
+    \item resilient to edge-flips
+\end{itemize}
+
+Shallow and small allow to keep our CFG simple, as code is not deeply nested and functions are not big. 
+
+\subsubsection{Algorithm wmVVS: Recognition}
+
+Main problem: How do you find the watermark CFG among all the “real” CFGs?
+\begin{itemize}
+    \item Marks are the basic blocks
+    \item A zero for every cover program block, a 1 for every watermark block.
+    \item Recognition procedure:
+    \begin{itemize}
+        \item compute the mark value for each basic block in the program
+        \item assume that any function with more than t blocks marked is a watermark function
+        \item construct CFGs for the watermark functions
+        \item decode each one into an integer watermark
+        \item The embedder can split the watermarking into pieces, for higher bitrate.
+    \end{itemize}
+\end{itemize}
+
+Watermark embeddings are short identifiers difficult to locate and hard to destroy. 
+The adversary, once known the object is marked and know the algorithm that is used doesn't know the key, and will find a way to modify the watermarking/remove the watermarking in an actively way (can perform action in the watermarked object).\newline
+What programmer really care about is data-rate, stealth, and resilience. 
+
+\subsection{Steganographic embeddings}
+
+Stegomarks are long identifiers difficult to locate.\newline 
+The adversary want to knows if the object is marked and what algorithm has been used. 
+Here, the adversary is passive. \newline
+What we care about are data-rate and stealth.
+
+\subsection{Prisoners' problem}
+
+Prisoners problem is about two prisoners that want to escape a prison and don't want to get caught by a guard. The can use steganography in a message to encode a secret message using some ciphrary (i.e. null cipher, that takes only Uppercase letter into consideration).
+
+\subsection{wmASB: hidden messages in x86 binaries}
+
+What if we would like to hide a message in a compiled binary file? 
+When the compiler is deciding what code to generate, we need to decide to generate the code that has as the first character a bit from the \textit{message W}. 
+
+\subsubsection{wmASB: embedding}
+
+\begin{itemize}
+    \item Construct part: we want to create a \textit{codebook B} of equivalent instruction sequences and a \textit{statistical model M} of the real code.\newline
+    \item Encrypting W with the key
+    \item Canonicalize P: sorting block chains, procedures, and modules. 
+    Then, we can order instructions in each block in a standard order. 
+    \item Code layout: embed bits from W by reordering code segments within the executable.
+    \item instruction scheduling:
+    \begin{itemize}
+        \item build dependency graph
+        \item generate all valid instruction schedules
+        \item embed bits from W by picking a schedule 
+        Using M to avoid picking unusual schedules. 
+    \item Instruction selection: 
+    Use B to embed bits from W by replacing instructions and use M to avoid unusual instruction sequences. 
+    \end{itemize}
+\end{itemize}
+
+\subsection{How to design a watermarking algorithm?}
+
+First of all, decide a language to encode the mark (can be CFGs, threads, dynamic control flow...). Then, construct an encoder/decoder (from number to CFG, ...). After, we need a tracer/locator to find locations for the mark. Then again, construct an embedder/extractor to tie the mark to the real code and being able to extract it. 
+Finally, decide on an attack model.
+
+\section{Dynamic Watermarking}
+
+In static watermarking the idea is the following:
+\begin{itemize}
+    \item embedding: we need to decide where to embed the watermark in our software.
+    \item recognition: we extract the mark by analysing the code itself.
+    \item attack: phase in which we disrupt the recognizer by permuting the original code, or embedding the attacker's watermark.
+\end{itemize}
+
+What in dynamic watermarking? 
+\begin{itemize}
+    \item embedding: we embed the mark by adding code that can changes program's behaviour.
+    \item recognition: we extract the mark by running the program and analysing its behavior. 
+    In the end, the program produces the watermark into its state. 
+\end{itemize}
+
+When performing dynamic watermarking, we need a secret key, represented as a special input sequence $l_1$, ..., $l_k$.
+
+\subsection{Attack against dynamic state}
+
+Attackers could split up the watermark variable, invalidating the watermark.
+We should decide carefully the place where we store the mark, as an attacker could try to modify the data in that memory partition. 
+An important thing: with dynamic watermarking to verify a program we need before to execute it!
+
+\subsection{Algorithm wmCT: exploiting analising}
+
+In the embedding phase we do the following:
+\begin{itemize}
+    \item let n be the watermark number 
+    \item convert n to a graph G that encodes the number
+    \item convert G to code C that builds the graph 
+    \item add C to your program so that it's executed for the special input
+\end{itemize}
+
+Recognition phase is:
+\begin{itemize}
+    \item run the program for the special input 
+    \item dump all objects on the heap 
+    \item reconstruct the graph G 
+    \item convert G to the watermark number n
+\end{itemize}
+
+What if we would like to increment the bitrate? 
+We can simply build a bigger graph. The problem with bigger graphs is that they are less stealth. 
+We can then split the graph in smaller pieces and then choose an efficient graph encoding.
+
+To sum up with algorithm wmCT we have: 
+
+Size overhead: embed a 20-bit watermark only requires 141 bytes of Java bytecode.\newline 
+Performance overhead: the graph-building code is only executed for the special input. \newline 
+Chief advantage: tamperproofing is easy. \newline 
+Attacks: Scan the code for allocations and pointers manipulations:
+Stealth: good in OO programs. 

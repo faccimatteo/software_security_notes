@@ -1,0 +1,124 @@
+\section{Program Analysis}
+
+We can define program analysis as the process of analyzing the flow of a program to understand possible vulnerabilities and security issues. Program analysis can be done by a programmer but even by an attacker. 
+
+\subsection{Types}
+Program analysis types can be divided in two parts: 
+
+\begin{itemize}
+    \item static analysis tools: collect information about a program by studying its code
+    \item dynamic analysis tools: collect information from executing the program
+\end{itemize}
+
+\subsection{Static analysis} 
+We can have different types of static analyses. We can have: 
+\begin{itemize}
+    \item Control-Flow Graphs: representation of (possible) control-flow in functions
+    \item Call graphs: representation of (possible) function calls 
+    \item Disassembly: turn raw executable into assembly code
+    \item Decomposition: turn raw assembly code into source code
+\end{itemize}
+
+\subsection{Dynamic Analyses}
+Dynamic analysis allow us to analyse the program not by just checking its source code, but actually doing a check at runtime. 
+Some technique used are: 
+\begin{itemize}
+    \item Debugging: indicates what path does the program take
+    \item Tracing: indicates which functions or system calls get executed
+    \item Profiling: indicates what gets executed the most
+\end{itemize}
+
+\subsection{Control-Flow Graphs (CFGs)}
+
+CFGs are a way to represent the possbile flow of a function. 
+Nodes are basic blocks, and block are connected by a straight-line code ending (possibly) in a branch. In CFGs, we have a single entry and exit point.
+
+\subsubsection{Build the Graph}
+
+To build a CFG for a program, we can follow these simple steps: 
+\begin{itemize}
+    \item 1. Mark every instruction which can start a basic block as a leader
+    \begin{itemize}
+        \item the first instruction is a leader; any target of a branch is a leader
+        \item the instruction following a conditional branch is a leader
+    \end{itemize}
+    \item A basic block consists of the instructions from a leader up to, but not
+including, the next leader.
+    \item If for two edges A and B we have the following relationship (A $\rightarrow$ B) it means A ends with a branch to B or can fall through to B. 
+\end{itemize}
+
+\subsection{Call Graphs}
+
+Call graphs are part of inter-procedural analysis. They determine a way to represent possible function calls. Each node represent a function. An edge A $\rightarrow$ B means that A might call B. 
+
+\subsection{Disassembly}
+
+Disassembly is the process of taking a binary file and recovering back its assembly file. 
+The steps that follows are address code $\rightarrow$ code bytes $\rightarrow$ assembly. 
+A thing to mention is that disassembly is an hard process, and sometimes disassemblers get it wrong! 
+Program analysis can be more or less precise. 
+
+\subsubsection{Linear Sweep Disassembly Algorithm}
+
+Main principle is the following: whenever an instruction ends, another begins. 
+Then main problem we encounter is where to begin and where to stop. 
+The assumption is usually done is that everything contained in sections of a program is marked as code represents machine language instructions. 
+Disassembly is a process that begins with the fist byte in a code section and moves in a linear fashion, through the section, disassembling one instruction after another until the end of the section is reached. 
+The length of each instruction is computed and used to determine the next location of the next instruction to be disassembled. As we previously mentioned, disassemble is a process that is processor-os-based. Talking about instruction's length, instruction sets with fixed-length instructions (MIPS to cite one) are easier to disassemble, as of course we know exactly the length of every instruction, which is the same. 
+\par 
+The main advantage of the linear sweep algorithm is that it provides complete coverage of a program's code sections. 
+On the other hand, one of the main disadvantages is that it can confuse data with code. 
+Linear sweep is used by the disassembly engines contained in the GNU debugger (gdb), Microsoft's WinDbg debugger, and the objdump utility. 
+\par 
+Sometimes, debugger can have error in its linear sweep algorithms. For instance, if a function contains a switch statement, it is implemented as a jump table to resolve case label targets. Said so, the jmp statement is referencing an address table, but the disassembler treats the address table as if it were a series of other instructions. So in this case the disassembler is disassembling with a failure. Instead of using three addresses, it is translating them in a first \textbf{loopne} instruction, that is completely meaningless. 
+
+\subsection{Recursive Descent Disassembly} 
+
+The recursive descent disassembly algorithm focuses on the concept of control flow.
+It determines whether an instruction should be disassembled based on whether it is referenced by another instruction.
+To understand recursive descent, it is helpful to classify instructions
+according to how they affect the instruction pointer.
+One of the principle advantages of the recursive descent algorithm is its
+superior ability to distinguish code from data.
+
+Recursive descent disassembler attempts to determine the target of the unconditional jump and continues disassembly at the target address. It does not guarantee complete code coverage. 
+One main disadvantage of static analysis is that when the target of a jump instruction is not know but at runtime, it may not be possible to determine the destination of the jump by using static analysis. 
+The x86 instruction \textbf{\textit{jmp rax}} demonstrate this problem.
+\par 
+The rax register contains a value only when program is actually running. We have then no way to continue the disassembly process, as it is done when program is not running.
+
+\subsubsection{But why is disassembly so hard...?}
+Few important reasons why disassembling is hard: 
+\begin{itemize}
+    \item variable length instruction sets: overlapping instructions 
+    \item mixed data and code: missclassify data as instructions
+    \item indirect jumps: must assume that any location could be the start of an instruction! 
+    \item find the beginning of functions if all calls are indirect
+    \item find the end of functions: if no dedicated return instruction
+    \item handwritten assembly code: it will not conform to the standard calling conventions
+    \item code compression: the code of two functions may overlap 
+    \item self-modifying code
+\end{itemize}
+
+\subsection{Decompilation}
+
+Decompilation is a process of de-compile a previously compiled file so we can have the written code again. 
+
+\subsubsection{Why is decompiling so hard?}
+
+\begin{itemize}
+    \item it involves disassembly as first step, so it has all the disadvantages of the disassembly process. 
+    \item target language issue: assembly code may not correspond to any legal source code. 
+    \item idioms of different compilers
+    \item artifacts of the target architecture, so unnecessary jumps-to-jumps
+    \item structured control-flow: from mess of machine code branches
+    \item compiler optimizations: undo loop, unrolling, shifts, and adds 
+    \item load/stores: operations on arrays, recors, pointers, and objects. 
+\end{itemize}
+
+
+\subsection{Conclusion}
+
+Disassembly Reverse engineering tools implements their own variations of disassembler algorithms. 
+Static analysis cannot be perfect as some assembly instructions require run-time information.
+Mixed code-data and variable length instructions of CISC architectures (e.g. x86) make disassembly harder than in RISC architectures (e.g. ARM) where instructions have fixed length. 

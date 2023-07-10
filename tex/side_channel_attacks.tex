@@ -1,0 +1,96 @@
+\section{Side-Channel Attacks}
+
+\subsection{What is a side-channel attack?}
+
+When designing cryptographic computations it is given as an assumption that the internal parts and implementations is not observed by a malicious entity.
+
+In reality, this scenario is unrealistic as an attacker will always try to find a way to discover what is "under the hood" and potentially break this cryptographic computations by understanding its cryptographic scheme. 
+
+The first time side-channel attacks was used it exploited the different click-sound of the machine to understand the passphrase inserted. 
+
+The efficiency of side-channel attacks is given as there is a correlation between the physical measurements taken during computation (different parameters can be taken into consideration, as power consumption, computing time, EMF radiation, etc.) and internal state of the device itself. 
+
+\subsection{Models of side channel attacks}
+
+\begin{itemize}
+    \item traditional security model: what is exploited is the mathematical specification of the protocol
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{img/traditional_security_model.png}
+        \caption{Traditional security model.}
+        \label{fig:tra_sec_mod}
+    \end{figure}
+    \item security model including side-channel: adversary may be able to monitor the power consumed or the electromagnetic
+    radiation emitted by a smart card while it performs private-key operations such as
+    decryption and signature generation. \newline
+    Adversary may act on time, timing how much time is spent on cryptographic operation, or how the device behave on fault injection.  
+    \begin{figure}
+        \centering
+        \includegraphics[scale=0.7]{img/security_model_including_side_channel.png}
+        \caption{Security model including side-channel.}
+        \label{fig:sec_mod_inc_side_channels}
+    \end{figure}
+    
+\end{itemize}
+
+\subsection{Passive and active attacks}
+
+Passive attacks are those that do not noticeably interfere with the operation of the target system. 
+
+Active attacks when adversary exerts some influence on the behavior of
+the target system. While the actively attacked system may or may not be
+able to detect such influence, an outsider observer would notice a
+difference in the operation of the system.
+
+Attacks are divided into three categories: invasive attacks, semi-invasive attacks, and non-invasive attacks. 
+
+\subsubsection{Invasive attacks}
+
+Invasive attacks involves de-packaging to get direct access to the internal components of cryptographic models or devices.
+
+For instance, a practical example could be attacking the passivation layer of a cryptographic module and place a probing needle on a data bus to see the data transfer. 
+
+\subsubsection{Semi-invasive attacks}
+In semi-invasive attacks, we access the devices without damaging the passivation layer or make electrical contact with unauthorized surface. 
+
+\subsubsection{Non-invasive attacks}
+Attack the device just by analyzing the information that are available from the external. 
+One example could be the timing attack, that analyze the times spent by the device performing certain operation to deduce how long did it take to perform a certain operation. 
+These types of attacks are completely undetectable, as the act from the external. 
+
+\subsection{Most commonly known Side Channel Attacks}
+\begin{itemize}
+    \item Timing Attack
+    \item Fault Attack
+    \item Power Analysis Attack 
+    \item EM Attack 
+\end{itemize}
+
+\subsubsection{Timing attack}
+Timing attacks can intercept secret parameters from cryptographic algorithms due to a leak of information obtained during a careful statistical analysis. 
+
+\subsubsection{Fault attack}
+Fault attacks involve injecting a fault in cryptographic modules.
+The fault is injected at the appropriate time during the process. 
+More in particular, the fault act in voltage, clock, temperature, radiations, light, and other physical property. 
+
+\subsubsection{Power Analysis Attack}
+This passive side channel attack watches a trace or power usage of the system. 
+Target can be an encryption key that is not readable.
+Power usage is kept monitored and logged, power usage spikes are associated with possible bytes in a key.\newline
+
+Simple power analysis: guess from power trace which particular instruction is being executed at a certain time (and possibly input and output values). Attacker needs an exact knowledge of the implementation.\newline
+
+Differential power analysis: in this case attacker does not need to know the exact implementation to perform the attack. 
+
+\subsection{Electo Magnetic Attack}
+Electo magnetic attacks involve in examine the radiations emanated and understand their casual relationship with data computation. 
+
+\subsection{Side-Channel Attacks countermeasures}
+
+Possible solution to side-channel attacks can be: 
+\begin{itemize}
+    \item modify the program execution to interfere in the attacker analysis. It is sort of obfuscation, but referred to timing shifts, wait states, dummy instructions insertion, and operation execution randomization.
+    \item replacing critical assembler instructions with ones whose "consumption signature" is hard to analyze.
+    \item masking data and key with different random mask generated at each run.
+\end{itemize}

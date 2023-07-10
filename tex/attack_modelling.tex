@@ -1,0 +1,103 @@
+\section{Attack Modelling}
+
+\subsection{Attack Trees}
+
+We need to model threats against computer systems. We need to think on what are the different ways in which a system can be attacked. Understanding attacks allow us to design proper countermeasures. Attack trees are a given model to describe the security of a system. 
+
+The root node is the overall goal the attacker wants. Attacker trees have both AND and OR nodes:
+\begin{itemize}
+    \item OR: alternatives to achieving goal
+    \item AND: different steps toward achieving a goal
+\end{itemize}
+For instance, if we would like to build up a tree to attack a communication that involves sending a message from computer A to B. 
+\begin{itemize}
+    \item 1. Convince sender to reveal message
+        \begin{itemize}
+            \item Bribe user, OR
+            \item Blackmail user, OR
+            \item Threaten user, OR
+            \item Fool user
+        \end{itemize}
+    \item 2. Read message while it is being entered
+        \begin{itemize}
+            \item Monitor electromagnetic radiation, OR
+            \item Visually monitor computer screen.
+        \end{itemize}
+    \item 3. Read message while stored on A’s disk.
+        \begin{itemize}
+            \item Get access to hard drive, AND
+            \item Read encrypted file.
+        \end{itemize}
+    \item 4. Read message while being sent from A to B.
+        \begin{itemize}
+            \item Intercept message in transit, AND
+            \item Read encrypted message.
+        \end{itemize}
+    \item 5. Convince recipient to reveal message
+        \begin{itemize}
+            \item Bribe user, OR
+            \item Blackmail user, OR
+            \item Threaten user, OR
+            \item Fool user
+        \end{itemize}
+    \item 6. Read message while it is being read
+        \begin{itemize}
+            \item Monitor electromagnetic radiation, OR
+            \item Visually monitor computer screen
+        \end{itemize}
+    \item 7. Read message when being stored on B’s disk.
+        \begin{itemize}
+            \item Get stored message from B’s disk after decryption, OR
+            \item Get stored message from backup tapes after decryption.
+        \end{itemize}
+    \item 8. Get paper printout of message
+        \begin{itemize}
+            \item Get physical access to safe, AND
+            \item Open the safe
+        \end{itemize}
+\end{itemize}
+
+\section{Petri Nets}
+
+\subsection{Definition}
+
+Petri Nets were first introduced by Carl Adam Petri in 1962, to model sequence of chemical reactions. They have been utilized in different computer science fields, for instance to model concurrency and synchronization in distributed systems. 
+Petri nets are similar to State Transition Diagrams:
+\begin{itemize}
+    \item visual representation to model the system behavior
+    \item based on strong mathematical foundation
+\end{itemize}
+
+\subsection{Places and Transitions}
+
+A Petri Net consist of three types of components: places, transitions, and arcs.\newline
+Places represent possbile state of the system.\newline
+Transitions are events or actions which cause the change of state.\newline
+Arc connects a place with a transition or a transition with a place. 
+Places with outgoing arcs are called input places of the transition. 
+Places with incoming arcs are called output palces of the transition. 
+
+\subsection{Change of State}
+
+Change of state is denoted by the transfer of a token (black dot). Change of state is caused by the firing of a transition. Firing represents an occurrence of an event or an action taken.
+Firing is subject to token availability, if token is not available, action cannot be taken. 
+Once the action is taken, one token per input place is consumed and one token is created in each output place. 
+
+\subsection{Choice and Conflict}
+Choice is equivalent to a if construct in programming language. 
+It depends from which branch fill fire the action. 
+Conflict is when two different actions are competing for the same token.
+
+\subsection{Tokens}
+
+Places in a Petri net may contain a discrete number of marks called tokens. 
+Any distribution of token over the places will represent a configuration of the net called "marking", the global state of the Petri net. 
+Generally, the execution of a Petri net is nondeterministic. 
+
+\subsection{Software Protection: Attack Modelling with Petri Nets}
+
+Petri Nets can model the different tasks to perform an attack. 
+PN transitions are single tasks performed by the attacker: the attack steps.
+PN places are states: start, intermediate states, and final goal. 
+Assumption: only one token in the starting place and the net structure will always lead to a final place, representing the attacker's goal. 
+Petri Nets can classify static attacks but also dynamic attacks. 

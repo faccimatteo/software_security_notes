@@ -1,0 +1,110 @@
+\section{Evaluation of Software Protection}
+
+\subsection{Different metrics}
+
+Tiger teams' scope is to evaluate new systems and transformations, as they penetrate security and test security measures.  
+
+\subsubsection{SW Complexity Metrics}
+
+Software Complexity Metrics were not designed to measure code badness. 
+We can use different metrics to do so: 
+\begin{itemize}
+    \item Knot count: number of edge crossings in control flow graph
+    \item Cyclomatic number: how many cycle does the code spend to perform an operation
+    \item Number of decision points: #edges + #nodes + 2 * (#connected components)
+\end{itemize}
+
+\subsubsection{Resilience to Analysis Tools}
+
+Measure how many second are necessaries to obfuscate the program with certain parameters. After that, you can measure the runtime and precision of code analysis tool, measuring the time spent analyzing the obfuscated code.
+
+\subsubsection{Empirical Experiments}
+
+Measuring how much time is taken by students to solve a task on the obfuscated code. Not that this is not an objective parameter, as it does not scale since students can have different skills and can perform better over time. 
+
+
+\subsection{Complexity Metrics}
+
+When executing software protection there are three questions we need to take into consideration:
+\begin{itemize}
+    \item What am I trying to achieve?
+    \item What matters for achieving that?
+    \item How do we evaluate that? 
+\end{itemize}
+
+When evaluating an attack we need to identificate the attack attributes: 
+
+\begin{itemize}
+    \item Identification: quantify the effort to break an application once.
+    \item Exploitation: expresses the possibility that the attack can be repeated and scaled.
+\end{itemize}
+
+\subsection{Software Protection Strength}
+\begin{itemize}
+    \item Potency: confusion, complexity, manual effort.
+    \item Resilience: resistance against (automated) tools.
+    \item Cost: performance, code size.
+    \item Stealth: identification of (components of) protections.
+\end{itemize}
+
+Software Metrics in Tigress analyise the quality of the obfuscation in term of the transformation and the transformation speed. 
+
+\subsection{Obfuscation resilience}
+
+Obfuscation resilience can be measured as: 
+the percentage of the program that has not been removed by an automated de-obfuscation treatment (using static or analysis tool).
+
+\subsection{Empirical Experiments - Quantitative Analysis}
+
+Associating the concept to human subjects we can try to answer some questions:
+
+\begin{itemize}
+    \item What is the real protection provided?
+    \item For identification/engineering
+    \item For exploitation
+    \item Which protection is better?
+    \item Against which type of attacker?
+    \item How fast do subjects learn to attack protections?
+    \item Which attack methods are more likely to be used?
+    \item Which attack methods are more likely to succeed?
+\end{itemize}
+
+Taking into consideration the obfuscation process, instead, we can define that an obfuscation process should: 
+
+\begin{itemize}
+    \item Increases the capability needed from a subject to comprehend decompiled source code
+    \item Increases the capability needed from a subject to perform an attack
+    \item Increases the time needed to perform a comprehension task
+    \item Increases the time needed to perfom an attack
+\end{itemize}
+
+The goal is to analyse the effect of code obfuscation to evaluate its effectiveness.
+So two are the main thing on which we should focus in this context:
+
+\begin{itemize}
+    \item Capability of undestanding the obfuscated code.
+    \item Capability to perform attacks on the obfuscated code.
+\end{itemize}
+
+We try to de-compile the obfuscated code and the clear code. Then, we check our variable can be: 
+\begin{itemize}
+    \item Ability to perform comprehension tasks
+    \item Time required for comprehension
+    \item ability to correctly perform an attack 
+    \item time required to perform an attack
+\end{itemize}
+
+\subsection{Understanding protected software}
+
+Understanding software protection consists in a series of step that have to be done from an external observer to bypass protection measurements. \newline
+
+The process can be described as follows:
+\begin{itemize}
+    \item Run analysis and reason on analysis results
+    \item After completed analysis results, we want to use some tool to try to perform two things: find specific patterns and undo protection
+    \item Sometimes, when using a tool, we can income in some obstacles, like failure in dynamic analysis. In that case, we can device to choose an alternative tool. If most of tools have this problem we can say we have a tool limitation. 
+    \item If no tool is the right one, we have enough time and we have, we can design and create our own tool, to find pattern and then undo software protection systems.
+    \item To perform the analysis, is necessary to understand the app and identify the sensitive assets. 
+    \item After have understood the app, we need to make hypothesis and build an attack strategy. If our hypothesis can be confirmed, we are on the right way on our analysis. 
+    \item If protection can be undone, they try to tamper with the code or with execution. If protection has been overcome, they can reason on how can a workaround be designed to protect the software. 
+\end{itemize}

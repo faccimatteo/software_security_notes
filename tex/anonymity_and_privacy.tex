@@ -1,0 +1,236 @@
+\section{Anonymicity and Privacy}
+
+\subsection{Privacy - GDPR}
+
+GDPR (General Data Protection Regulation) is a set of unified rules for all EU countries. 
+It is valid since May 25, 2018. \newline
+GDPR regulation has two main goals: 
+\begin{itemize}
+    \item Protect personal data & strengthen the privacy rights of EU individuals
+    \item Give users control over their data
+\end{itemize}
+
+All business collecting or holding personal data on EU citizens is affected by the GDPR. This means that even if a US company is treating our data, it must be compliant to GDPR.
+
+User's right in GDPR are: 
+
+\begin{itemize}
+    \item Getting consent to process personal data
+    \item Right to be forgotten
+    \item Right to modify personal data
+    \item Transparency - right to get information 
+    \item User can request data in portable format
+    \item Right to access data 
+    \item Right to rectification 
+    \item Right to erasure 
+    \item Right to restriction of processing
+    \item Right to data portability
+    \item Right to object
+\end{itemize}
+
+On the other hand, company must: 
+
+\begin{itemize}
+    \item Audit data log 
+    \item Appointing DPO(Data Protection Officer)
+    \item Check data processors
+    \item Monitoring data breach 
+\end{itemize}
+
+GDPR Stakeholders are: 
+
+\begin{itemize}
+    \item Data subject
+    \item Data controller 
+    \item Data protection officer 
+    \item Data processor 
+    \item Data Authority
+\end{itemize}
+
+Some tools and apps related contents to GDPR are:
+
+\begin{itemize}
+    \item Mail
+    \item Data processors (CRM, Cloud storage, ...)
+    \item Privacy Policies 
+    \item Cookie Control Banner 
+\end{itemize}
+
+ To respect the GDPR a company must be GDPR compliant. A company can be defined GDPR compliant only after been verified with an auditing process used to store, use and transmit data within a company. In case of infractions, the National GDPR regulator can require a company to comply with a deadline before imposing the big monetary fine.\newline
+ The CSRD directive is the Corporate Sustainability Reporting and it states that companies must ensure transparecy with regard to: 
+ \begin{itemize}
+     \item Respect for human rights 
+     \item Anti-bribery and corruption 
+     \item Board Diversity 
+     \item The environment
+     \item Treatment of staff and approach to social matters
+ \end{itemize}
+
+ One day companies will be induced to be more concerned about data protection not only to comply with the law or to avoid sanctions but to be more competitive on the market. And that day privacy will no longer be just a cost but (finally) an investment and a very important asset. Privacy protection is not just a legal problem, but a moral and cultural one.
+
+ \subsection{Privacy-Enhancing Technologies (PETs)}
+
+ \subsubsection{Privacy by design}
+
+ Privacy patterns are designed solutions to common privacy problems, they are a way to translate "privacy-by-design" into practical advice for software engineering. Using these patters we can then establish common security rules for softwares.\newline
+ PETs(Privacy-Enhancing Technologies) minimize and protect personal data. It allows analysis of large data sets in a way where no one person's information is ever disclosed. 
+
+ Privacy Enhancing Technologies can be listed as: 
+
+ \begin{itemize}
+     \item Secure Multiparty Computation
+     \item Fully Homomorphic Encryption 
+     \item Functional Encryption 
+     \item Differential Privacy 
+     \item Federated Learning 
+ \end{itemize}
+
+Encryption is a requirement necessary through the entire information pipeline. This is very important as an attacker could sniff data in certain spot of the pipeline and extract some useful information. 
+In fact, Next Generation Cryptography rules are the following: 
+
+\begin{itemize}
+    \item Protect data in transit (in the network)
+    \item Protect data at rest (in cloud storage) 
+    \item Protect data in use (while processing it)
+\end{itemize}
+
+A question can be spontaneous at this point: how do you protect data while performing computing on it?\newline
+We have to reason whether the output reveals private information. For example, outcome of processing could reveal sensitive information like: 
+\begin{itemize}
+    \item medical records
+    \item financial transactions
+    \item genomic material
+\end{itemize}
+
+\subsection{Secure Multi-Party Computation}
+
+MPC guarantees that we do not reveal anything about the input data that the output of a computation previously agreed upon. 
+Mathematical guarantees: if anyone can learn anything more, than they can solve hard mathematical problem. 
+
+In MPC, two or more parties would like to jointly compute a function F on their inputs, while keeping these inputs private.\newline
+
+MPC can be applied in:
+\begin{itemize}
+    \item Data analytics: big companies and organization that deal with confidential user data, can collect data securely from an anonymouse pool of users, compute, analyze, and gain insights from the data using MPC. This way, users will not reveal their personal information, and these organizations can analyse the data for insights without uncovering it. 
+    \item Genetic Testing: Patients can access their genetic profiles privately and securely without revealing any confidential information
+    \item Blockchain: multi-signature technology schemes are a subfield of multi-party computation and can perform similar functions as a private key on the blockchain, including public address generation and transaction signing. Using multi-party computation, private keys of a crypto wallet can be split among several parties. This is an important improvement, as when the private key is required, a minimum number of people holding key shares have to be involved. 
+    \item Crypto wallets: a single private key is split between multiple entities, making it more difficult for attackers to compromise the digital wallet since they have to attack multiple points simultaneously.
+\end{itemize}
+
+\subsection{Fully Homomorphic Encryption}
+
+\subsubsection{Description}
+
+Given that $E(m_1) = m_1^e$ and $E(m_2) = m_2^e$ 
+
+Multiplicative Homomorphism:  $E(m_1) x E(m_2) = E(m_1 x m_2)$
+Additive Homomorphism: $E(m_1) + E(m_2) = E(m_1 + m_2)$
+
+For instance, RSA is multiplicatively homomorphic, while other encryptions were additively homomorphic. 
+What is really important is the ability to do arbitrary computing on encrypting data and this required the ability to compute both sums and products on the same encrypted data set. 
+SUM is associated to XOR, while PRODUCT is associated with AND. \newline
+XOR and AND are Turing-complete, so this satisfies this properties: 
+
+\begin{itemize}
+    \item Any function can be a combination of XOR and AND gates.
+    \item If you can compute sums and products on encrypted bits, you can compute ANY function on encrypted bits. 
+\end{itemize} 
+
+Fully-homomorphic encryption delegate arbitrary processing of data without giving away access to it, like private cloud computing. 
+
+\subsubsection{Fully Homomorphic encryption scheme}
+
+In the first step, to establish a symmetric encryption a secret key is used. This secret key is a large odd number p.\newline
+To encrypt a bit b we do the following:
+\begin{itemize}
+    \item pick a (random) "large" multiple of p, say q*p
+    \item pick a (random) "small" number 2*r+b (this is even if b=0, and odd if b=1)
+    \item ciphertext $rightarrow c = q*b + 2*r+b$
+\end{itemize}
+To decrypt a ciphertext c: 
+\begin{itemize}
+    \item Taking c mod p recovers the noise ($2*r+b$ part).
+\end{itemize}
+
+If this noise is present, attacker cannot attack the ciphertext using GCD attack. Moreover, the attacker cannot perform any form of attack. This is called GCD assumption. We can perform multiplication and addition on this. However, we have a problem when noise grows.
+We can perform then addition and multiplication on the ciphertext making the initial noise grows. If the $|noise| > p/2$, then decryption will output an incorrect bit
+We can do lots of additions and some multiplications, enough to do many useful tasks, like database search, spam filtering, etc..
+
+In Fully Homomorphic Encryption the idea is, as we have seen, to perform computations on encrypted data. When talking about fully, we mean that potentially every function can be evaluated, while in the other cases (additive, partial, leveled, somewhat) there are limitations.\newline
+
+An example scenario in which FHE can be used is when a client that sends encrypted data to a server and asks this latter to evaluate a function F on this encrypted data. Here, the server manipulated only encrypted data. 
+
+\subsubsection{Functional Encryption}
+
+FE is a public key construction, on which it is possible to produce functional secret keys allowing a party to evaluate a specific function F (generally public) on an encrypted input during its decryption. In this way, the input is encrypted and the output is in cleartext.
+
+\subsection{Differential Privacy}
+Differential Privacy (DP) measure and bound the difference of the computation output on two databases that differ on a single record. 
+
+\subsection{Federated Learning}
+
+Federated Learning (FL) is a machine learning setting where multiple entities (clients) collaborated in solving a ML problem, under the coordination of a central server or service provider. Each client's raw data are stored locally and not exchanged or transferred. 
+Focused updates intended for immediate aggregation are used to achieve the learning objective. 
+
+\subsection{Anonymizing Network Thechnologies (TOR)}
+
+\subsubsection{What is the TOR network?}
+
+When talking about network traffic, internet surveillance like traffic analysis can compromise user's privacy, because even if encrypted, packet headers still reveal a great deal about users. If a user in the network wants to be anonymous, it then needs to use a distributed network.
+
+TOR is then a distributed network that allows people and groups to improve their privacy and security on the internet. \newline
+Individuals can use TOR to keep websites from tracking them, or to connect to those internet service blocked by their local Internet providers. It is important to mention that onion websites standing in the TOR network, reachable through onion routing, stay anonymous maintaining their IP address private. They are called hidden services.
+
+\subsubsection{Design}
+As previously mentioned, TOR defines an architecture made by:
+
+\begin{itemize}
+    \item Onion Routers (OR) route traffic
+    \item Onion Proxy (OP): fetches directiories and creates virtual circuits on the network on behalf of users. 
+    \item Client: user using TOR network
+    \item Server: target TCP applications such as web servers
+    \item TOR (onion) router: the special proxy relays the application data
+    \item Directory server: servers holding TOR router information
+\end{itemize}
+
+TOR uses TCP with TLS if the onion website provide HTTPS, TCP without TLS if not. All data is sent in fixed size (bytes) cells. 
+
+\subsubsection{How does TOR work?}
+
+\subsubsection{What is I2P?}
+
+I2P, The Invisible Internet Project, allow for anonymizing P2P network providing end to end encryption. It utilizes decentralized structure to protect the identify of both the sender and receiver. It is UDP based. \newline
+Encryption is not sufficient to protect the content of communications, since a lot of meta-data are uncovered without that:
+
+\begin{itemize}
+    \item Who talks to whom?
+    \item How often?
+    \item At what times?
+    \item What volumes?
+    \item In which sequence?
+    \item What are the groups?
+    \item From which locations?
+\end{itemize}
+
+\subsubsection{Problems of TOR network}
+
+However, not every architecture is perfect and so TOR has its limitations:
+
+\begin{itemize}
+    \item Latency
+    \item Statistical & disclosure attacks: TOR is not secure against the global passive adversary.
+    \item (n-1) attacks & sybil attacks
+    \begin{itemize}
+        \item Sybil attacks: adversary pretends to be many senders.
+        \item (n - 1) attacks: the adversary blocks a mix input to only receive a single genuine message. 
+    \end{itemize}
+    We can avoid these attacks by authenticating users, drop messages if they are delayed, and perform sybil detection based on social graphs. 
+    \item Epistemic attacks: all clients need to use the same information to construct paths through relays, otherwise we have attacks based on knowledge of the client (epistemic). 
+\end{itemize}
+
+Forward secrecy ensures that a leaked key cannot compromise past (or future) messages.
+
+\subsubsection{Other TOR problems}
+
+Stream Tracing attacks: adversary can link two points of an anonymous circuit, by making a model template of output from input, and match. \newline
+Indirect load estimation: global passive adversary is an abstraction. Real adversaries only need an estimate of traffic load. We can inject pattern at corrupted server, and trace through indirect load estimation. 
